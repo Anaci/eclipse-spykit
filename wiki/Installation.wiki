@@ -1,0 +1,22 @@
+#summary One-sentence summary of this page.
+#labels Featured,Installation,PluginExecution
+
+= Installation =
+
+The installation is simple. Just download the Eclipse Spykit Plugin Jar from the Downloads and place it into your <inst_dir>\eclipse\dropins directory. 
+
+Next decide whether you want to spy on your base Eclipse installation (use the -debug command line option) or whether you want to spy on your Run-time Workbench (use the Tracing page of its launch configuration). 
+
+= Spy over Workbench =
+  * Start Eclipse with -debug option
+  * This will look for a .option file in the <inst_dir>\eclipse foder
+  * You can also specify the path of the .option file after - debug
+P.S .options file is available for download from the Download Section.
+    It is available in the misc folder if you download the Src.
+
+= Spy over Runtime Workbench =
+  * Star Eclipse with -debug option
+  * This will look for a .option file in the <inst_dir>\eclipse foder
+  * You can also specify the path of the .option file after - debug
+P.S .options file is available for download from the Download Section.
+    It is available in the misc folder if you download the Src.
