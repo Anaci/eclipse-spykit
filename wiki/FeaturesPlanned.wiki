@@ -6,3 +6,5 @@
   * Integration into Functional Testing Plugins like Window Builder or SWTBot
     # Based on the events performed by the Automated Functional Test Cases, the Startup Activities of the Plugins would be logged.
     # This would help Programmers to check if the Lazy Loading of the Plugin is happening as expected.
+  * Snapshot Compare Facility
+    # You would be able to export the SnapShot of the Plugins loaded after each desired set of Events and Compare them against each other.
