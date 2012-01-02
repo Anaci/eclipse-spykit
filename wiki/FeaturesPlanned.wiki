@@ -1,5 +1,5 @@
+#summary This page contains the Features that we plan to support in eclipse-spykit
 #labels Featured,Phase-Requirements,Phase-Support
-#This page contains the Features that we plan to support in eclipse-spykit
 
 = Features Planned =
 
