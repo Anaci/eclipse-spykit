@@ -9,7 +9,8 @@
   * Snapshot Compare Facility
     # You would be able to export the Snapshot of the Plugins loaded after each desired set of Events and Compare them against each other.
   * Performance Tuning Dashboard
-    # Create a Performance Tuning Dashboard to integrate all the tools i.e. Plugin Performance Tuning, Memory Analyser Tool, Visual VM, Java Monitor Tools. 
+    # Create a Performance Tuning Dashboard to integrate all the tools 
+<br>i.e. Plugin Performance Tuning, Memory Analyser Tool, Visual VM, Java Monitor Tools. 
     # There are various tools to drive the performance tuning activities, but there is no collaborative tool that helps the performance tuning.
     # The Idea of the dashboard is to support displaying of value from various Performance tuning tools on a single screen like an Overview.
     # This tool will also enforce the importance of Performance Tuning to Software Developers and provide them with an easy to work on Dashboard.   
