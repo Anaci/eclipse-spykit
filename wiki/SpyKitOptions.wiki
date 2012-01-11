@@ -8,7 +8,9 @@ This page displays all the possible settings that you could enable in your .opti
 = Details =
 
 ---
+
 Common option settings for using the SpyKit
+
 ---
 
 #### Monitoring settings
