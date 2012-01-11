@@ -7,10 +7,9 @@ This page displays all the possible settings that you could enable in your .opti
 
 = Details =
 
-###########################################################
-#### Common option settings for using the Runtime Spy  ####
-###########################################################
-
+---
+Common option settings for using the SpyKit
+---
 
 #### Monitoring settings
 # monitor class loading
@@ -61,4 +60,5 @@ org.eclipse.osgi/debug/monitorbundles=false
 
 = Reference =
 http://www.jdg2e.com/ch32.performance/doc/options.html
+
 Ankur's Blog : http://blog.ankursharma.org/2011/12/osgi-tracing-in-equinox.html
