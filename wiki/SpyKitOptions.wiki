@@ -44,24 +44,30 @@ org.eclipse.osgi/trace/filename=runtime.traces
 org.eclipse.osgi/trace/filters=trace.properties
 
 # trace bundle activation - snapshot the execution stack when a bundle is activated
+
 org.eclipse.osgi/trace/activation=false
 
 
 #### Resources settings
 # enable Resource debugging
+
 org.eclipse.core.resources/debug=false
 
 # Monitor builders and gather time statistics etc.
+
 org.eclipse.core.resources/monitor/builders=false
 
 # Monitor resource change listeners and gather time statistics etc.
+
 org.eclipse.core.resources/monitor/listeners=false
 
 
 #### Debugging options for org.eclipse.osgi
 
 # Turn on general debugging for org.eclipse.osgi
+
 org.eclipse.osgi/debug=false
+
 org.eclipse.osgi/debug/monitorbundles=false
 
 = Reference =
