@@ -1,5 +1,6 @@
 package org.eclipse.spykit.runtime.views;
 
+
 import java.util.List;
 
 import org.eclipse.core.runtime.internal.stats.BundleStats;
@@ -10,6 +11,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
+import org.eclipse.spykit.runtime.Activator;
 import org.eclipse.spykit.runtime.views.actions.CopyDataAction;
 import org.eclipse.spykit.runtime.views.actions.SelectAllAction;
 import org.eclipse.spykit.runtime.views.columns.Columns;
@@ -33,6 +35,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleListener;
 
 
 /**
@@ -106,6 +110,14 @@ private Label lbl;
     getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.SELECT_ALL.getId(),
         new SelectAllAction(this.viewer));
     getViewSite().getActionBars().updateActionBars();
+    
+    Activator.getDefault().getBundle().getBundleContext().addBundleListener(new BundleListener() {
+		
+		@Override
+		public void bundleChanged(BundleEvent event) {
+			refresh();		
+		}
+	});
   }
 
   /**
