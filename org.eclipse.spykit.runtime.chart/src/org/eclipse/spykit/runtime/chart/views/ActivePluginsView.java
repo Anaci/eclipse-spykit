@@ -9,6 +9,7 @@ import org.eclipse.core.runtime.internal.stats.BundleStats;
 import org.eclipse.core.runtime.internal.stats.StatsManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.spykit.runtime.chart.Activator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -29,8 +30,10 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.experimental.chart.swt.ChartComposite;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleListener;
 import org.eclipse.jface.action.Action;
-import org.eclipse.wb.swt.ResourceManager;
+
 
 public class ActivePluginsView extends ViewPart {
 
@@ -42,7 +45,8 @@ public class ActivePluginsView extends ViewPart {
 	private Text txtPlatformInstallOs;
 	private Text txtNewText;
 	private Table table;
-	private Action action;
+	private ChartComposite chartComposite1;
+	private ChartComposite chartComposite2;
 	
 	public ActivePluginsView() {
 	}
@@ -125,13 +129,13 @@ public class ActivePluginsView extends ViewPart {
 		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 				
 		JFreeChart chart1 = createStartupAnalysisChart(createStartupAnalysisDataset(), "Startup Analysis I");
-		ChartComposite chartComposite1 = new ChartComposite(composite_1, SWT.NONE,
+		chartComposite1 = new ChartComposite(composite_1, SWT.NONE,
 				chart1, true);
 		chartComposite1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		toolkit.paintBordersFor(chartComposite1);
 		
 		JFreeChart chart2 = createStartupAnalysisChart(createActivatedByDataset(), "Startup Analysis II");
-		ChartComposite chartComposite2 = new ChartComposite(composite_1, SWT.NONE,
+		chartComposite2 = new ChartComposite(composite_1, SWT.NONE,
 				chart2, true);
 		chartComposite2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		toolkit.paintBordersFor(chartComposite2);
@@ -139,6 +143,23 @@ public class ActivePluginsView extends ViewPart {
 		createActions();
 		initializeToolBar();
 		initializeMenu();
+		
+		Activator.getDefault().getBundle().getBundleContext().addBundleListener(new BundleListener() {
+			
+			@Override
+			public void bundleChanged(BundleEvent event) {
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						JFreeChart chart1 = createStartupAnalysisChart(createStartupAnalysisDataset(), "Startup Analysis I");
+						chartComposite1.setChart(chart1);
+						
+						JFreeChart chart2 = createStartupAnalysisChart(createActivatedByDataset(), "Startup Analysis II");
+						chartComposite2.setChart(chart2);
+					}
+				});
+				
+			}
+		});
 	}
 	
 	/*
@@ -242,12 +263,7 @@ public class ActivePluginsView extends ViewPart {
 	 */
 	private void createActions() {
 		// Create the actions
-		{
-			action = new Action("Refresh") {
-			};
-			action.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.spykit.runtime.chart", "icons/refresh.gif"));
-			action.setToolTipText("Click to Refresh the Graph");
-		}
+		
 	}
 
 	/**
@@ -256,7 +272,7 @@ public class ActivePluginsView extends ViewPart {
 	private void initializeToolBar() {
 		IToolBarManager toolbarManager = getViewSite().getActionBars()
 				.getToolBarManager();
-		toolbarManager.add(action);
+		
 	}
 
 	/**
