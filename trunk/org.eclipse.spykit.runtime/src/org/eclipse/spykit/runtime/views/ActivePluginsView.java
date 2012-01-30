@@ -115,7 +115,12 @@ private Label lbl;
 		
 		@Override
 		public void bundleChanged(BundleEvent event) {
-			refresh();		
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					refresh();
+				}
+			});
+					
 		}
 	});
   }
