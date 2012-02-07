@@ -19,6 +19,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.event.PlotChangeEvent;
+import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -92,8 +93,6 @@ public class SnapshotView extends ViewPart {
 		JFreeChart chart1 = createChart(createDataset());
 		chartComposite1.setChart(chart1);
 		chartComposite1.forceRedraw();
-		
-    
 	}
 
 	/**
@@ -128,9 +127,10 @@ public class SnapshotView extends ViewPart {
         
         series1 = new XYSeries("Plugin Set");
         
-        int counter = countOfPlugins.size();
+        int counter = 1;
         for (Double count : countOfPlugins) {
-        	series1.add(counter++, count);
+        	series1.add(counter, count);
+        	counter++;
 		}
    
         final XYSeriesCollection dataset = new XYSeriesCollection();
@@ -156,7 +156,7 @@ public class SnapshotView extends ViewPart {
             "Y",                      // y axis label
             dataset,                  // data
             PlotOrientation.VERTICAL,
-            true,                     // include legend
+            false,                     // include legend
             true,                     // tooltips
             false                     // urls
         );
@@ -173,16 +173,34 @@ public class SnapshotView extends ViewPart {
     //    plot.setAxisOffset(new Spacer(Spacer.ABSOLUTE, 5.0, 5.0, 5.0, 5.0));
         plot.setDomainGridlinePaint(Color.white);
         plot.setRangeGridlinePaint(Color.white);
-       
-        
+                
         final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesLinesVisible(0, true);
-        renderer.setSeriesShapesVisible(1, false);
+        renderer.setBaseShapesVisible(true);
+        renderer.setBaseShapesFilled(true);
+        renderer.setToolTipGenerator(new XYToolTipGenerator() {
+			
+			@Override
+			public String generateToolTip(XYDataset arg0, int arg1, int arg2) {
+				// TODO Auto-generated method stub
+				return new String(arg0.getXValue(arg1, arg2)+","+arg0.getYValue(arg1, arg2) + " Plugins Loaded.");
+			}
+		});
+        renderer.setBaseItemLabelGenerator(new XYItemLabelGenerator() {
+			
+			@Override
+			public String generateLabel(XYDataset arg0, int arg1, int arg2) {
+				// TODO Auto-generated method stub
+				return new String(arg0.getXValue(arg1, arg2)+","+arg0.getYValue(arg1, arg2));
+			}
+		});
+        renderer.setSeriesPaint(0, Color.BLUE);
         plot.setRenderer(renderer);
+        
+
 
         // change the auto tick unit selection to integer units only...
-        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+       /* final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setStandardTickUnits(NumberAxis.createStandardTickUnits());*/
         // OPTIONAL CUSTOMISATION COMPLETED.
         
                 
