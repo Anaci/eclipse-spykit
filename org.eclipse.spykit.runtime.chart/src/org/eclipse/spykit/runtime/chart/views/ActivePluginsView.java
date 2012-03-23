@@ -179,12 +179,23 @@ public class ActivePluginsView extends ViewPart {
 			}
 			
 			Integer bundleCount = 1;
+			String keyName;
+			
+			if (parentBundle.equals(bundle)) {
+				keyName = "others";
+				if (bundleMap.containsKey(keyName)) {
+					bundleCount = bundleMap.get("others");
+					bundleCount += 1;
+				}
+				bundleMap.put(keyName, bundleCount);
+				continue;
+			}			
+			
 			if (parentBundle != null && bundleMap.containsKey(parentBundle.getSymbolicName())) {
 				bundleCount = bundleMap.get(parentBundle.getSymbolicName());
 				bundleCount += 1;				
-			} 			
-			bundleMap.put(parentBundle.getSymbolicName(), bundleCount);
-			
+			} 
+			bundleMap.put(parentBundle.getSymbolicName(), bundleCount);		
 		}
 	
 		for (Iterator iterator = bundleMap.keySet().iterator(); iterator.hasNext();) {
