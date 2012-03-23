@@ -266,6 +266,7 @@ private Label lbl;
 public void refresh() {
 	getViewer().refresh();
 	lbl.setText("Total Number of Plugins Loaded :: "+ StatsManager.getDefault().getBundles().length + "");
+	lbl.pack();
 }
 
 }
