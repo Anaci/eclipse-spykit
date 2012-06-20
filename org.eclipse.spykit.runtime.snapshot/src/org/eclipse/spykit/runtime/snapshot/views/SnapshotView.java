@@ -9,6 +9,8 @@ import org.eclipse.core.runtime.internal.stats.StatsManager;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.spykit.runtime.snapshot.Activator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -67,7 +69,8 @@ public class SnapshotView extends ViewPart {
 	private void createActions() {
 		// Create the actions
 		{
-			collectAction = new Action("Collect") {
+			ImageDescriptor img = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/images.jpeg");
+			collectAction = new Action("Collect", img) {
 				@Override
 				public void run() {
 					BundleStats[] bundles = StatsManager.getDefault().getBundles();
@@ -76,9 +79,11 @@ public class SnapshotView extends ViewPart {
 					redrawChart();
 				}
 			};
+			collectAction.setToolTipText("Collect Plugin Count !!");
 		}
 		{
-			clearAction = new Action("Clear") {
+			ImageDescriptor img = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/clear.jpeg");
+			clearAction = new Action("Clear", img) {
 				@Override
 				public void run() {
 					countOfPlugins.clear();
