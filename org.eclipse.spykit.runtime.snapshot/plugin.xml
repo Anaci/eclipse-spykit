@@ -4,7 +4,9 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+            category="org.eclipse.spykit.runtime.spykitcategory"
             class="org.eclipse.spykit.runtime.snapshot.views.SnapshotView"
+            icon="icons/images.jpeg"
             id="org.eclipse.spykit.runtime.snapshot.views.SnapshotView"
             name="Spykit Snapshot View">
       </view>
