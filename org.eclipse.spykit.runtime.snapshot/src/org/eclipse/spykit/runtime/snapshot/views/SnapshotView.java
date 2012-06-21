@@ -1,6 +1,13 @@
 package org.eclipse.spykit.runtime.snapshot.views;
 
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,19 +20,20 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.spykit.runtime.snapshot.Activator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.xy.XYDataItem;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -41,6 +49,9 @@ public class SnapshotView extends ViewPart {
 	
 	private JFreeChart chart1;
 	private ChartComposite chartComposite1;
+	private Action saveAction;
+	private Action loadAction;
+	private XYSeriesCollection dataset;
 
 	public SnapshotView() {
 	}
@@ -92,6 +103,87 @@ public class SnapshotView extends ViewPart {
 				}
 			};
 		}
+		{
+			ImageDescriptor img =  PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_SAVE_EDIT);
+			saveAction = new Action("Save", img) {
+				@Override
+				public void run() {
+					FileDialog fDialog = new FileDialog(Display.getDefault()
+							.getActiveShell(), SWT.SAVE);
+					String filepath = fDialog.open();
+					if (filepath != null && filepath.trim().length() != 0) {
+						try {
+							BufferedWriter bw = new BufferedWriter(
+									new FileWriter(new File(filepath), true));
+							XYSeries seriesCurrent = (XYSeries) dataset.getSeries().get(0);
+							List items = seriesCurrent.getItems();
+							for (Object object : items) {
+								XYDataItem dataItem = (XYDataItem)object;
+								String result = Double.toString(dataItem.getXValue());
+								result +=","+Double.toString(dataItem.getYValue());
+								bw.write(result);
+								bw.newLine();
+							}
+							
+							bw.close();
+						} catch (Exception e) {
+						}
+
+					}
+
+				}
+
+			};
+			saveAction.setToolTipText("Click to Save Current Snapshot Details");
+		}
+		{
+			ImageDescriptor img = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_HOME_NAV);
+			loadAction = new Action("Load", img) {
+				@Override
+				public void run() {
+					FileDialog fDialog = new FileDialog(Display.getDefault().getActiveShell(), SWT.OPEN);
+					String filepath = fDialog.open();
+					if(filepath.trim().length()!=0) {
+						JFreeChart chart1 = createChart(createDataset(filepath));
+						chartComposite1.setChart(chart1);
+						chartComposite1.forceRedraw();
+					}
+				}
+			};
+			loadAction.setToolTipText("Click to Load Previous Snapshot Details");
+		}
+	}
+	
+	private XYDataset createDataset(String pathName) {
+	
+		createDataset();
+		
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(new File(pathName)));
+			String line;
+			series1 = new XYSeries("Previous Plugin Set");
+			int counter = 1;
+			while((line = br.readLine()) != null) {
+			     Double count = Double.valueOf((line.substring(line.indexOf(",")+1)));
+			     series1.add(counter, count);
+			     counter++;
+			}
+
+			dataset = getDataset();
+			dataset.addSeries(series1);
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+  		
+		return getDataset();
+		
 	}
 
 	protected void redrawChart() {
@@ -108,6 +200,8 @@ public class SnapshotView extends ViewPart {
 				.getToolBarManager();
 		toolbarManager.add(collectAction);
 		toolbarManager.add(clearAction);
+		toolbarManager.add(saveAction);
+		toolbarManager.add(loadAction);
 	}
 
 	/**
@@ -130,7 +224,7 @@ public class SnapshotView extends ViewPart {
      */
     private XYDataset createDataset() {
         
-        series1 = new XYSeries("Plugin Set");
+        series1 = new XYSeries("Current Plugin Set");
         
         int counter = 1;
         for (Double count : countOfPlugins) {
@@ -138,14 +232,21 @@ public class SnapshotView extends ViewPart {
         	counter++;
 		}
    
-        final XYSeriesCollection dataset = new XYSeriesCollection();
+        dataset = new XYSeriesCollection();
         dataset.addSeries(series1);
   
         return dataset;
         
     }
     
-    /**
+    public XYSeriesCollection getDataset() {
+    	if(dataset==null) {
+    		dataset = new XYSeriesCollection();
+    	}
+		return dataset;
+	}
+
+	/**
      * Creates a chart.
      * 
      * @param dataset  the data for the chart.
