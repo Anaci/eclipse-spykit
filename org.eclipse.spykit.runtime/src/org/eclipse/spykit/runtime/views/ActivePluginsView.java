@@ -42,7 +42,7 @@ import org.osgi.framework.BundleListener;
 /**
  * @author Sandeesh
  */
-public class ActivePluginsView extends ViewPart {
+public class ActivePluginsView extends ViewPart implements BundleListener {
 	public ActivePluginsView() {
 	}
 
@@ -111,18 +111,7 @@ private Label lbl;
         new SelectAllAction(this.viewer));
     getViewSite().getActionBars().updateActionBars();
     
-    Activator.getDefault().getBundle().getBundleContext().addBundleListener(new BundleListener() {
-		
-		@Override
-		public void bundleChanged(BundleEvent event) {
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					refresh();
-				}
-			});
-					
-		}
-	});
+    Activator.getDefault().getBundle().getBundleContext().addBundleListener(this);
   }
 
   /**
@@ -242,6 +231,7 @@ private Label lbl;
   @Override
   public void dispose() {
     super.dispose();
+    Activator.getDefault().getBundle().getBundleContext().removeBundleListener(this);
   }
 
   /**
@@ -264,9 +254,24 @@ private Label lbl;
   }
 
 public void refresh() {
-	getViewer().refresh();
-	lbl.setText("Total Number of Plugins Loaded :: "+ StatsManager.getDefault().getBundles().length + "");
-	lbl.pack();
+		getViewer().refresh();
+		lbl.setText("Total Number of Plugins Loaded :: "+ StatsManager.getDefault().getBundles().length + "");
+		lbl.pack();
+}
+
+@Override
+public void bundleChanged(BundleEvent event) {
+	
+		if(event.getType() == BundleEvent.STARTED){
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					refresh();
+				}
+			});
+		}
+				
+	
+	
 }
 
 }
