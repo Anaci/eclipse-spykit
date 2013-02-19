@@ -55,7 +55,7 @@ it and contribute back to the project.
          id="org.eclipse.spykit.runtime"
          download-size="0"
          install-size="0"
-         version="1.0.0.qualifier"
+         version="2.0.0.qualifier"
          unpack="false"/>
 
    <plugin
