@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.spykit.runtime.feature"
       label="Runtime Spykit"
-      version="1.0.0.qualifier"
+      version="2.0.0.qualifier"
       provider-name="ANCIT Consulting">
 
    <description url="http://www.ancitconsulting.com/tiki-index.php?page=eclipse-spykit">
@@ -59,13 +59,6 @@ it and contribute back to the project.
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.spykit.runtime.chart"
-         download-size="0"
-         install-size="0"
-         version="1.0.0.qualifier"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.spykit.runtime.snapshot"
          download-size="0"
          install-size="0"
@@ -77,5 +70,12 @@ it and contribute back to the project.
          download-size="0"
          install-size="0"
          version="1.0.0"/>
+
+   <plugin
+         id="org.eclipse.spykit.ui"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.qualifier"
+         unpack="false"/>
 
 </feature>
